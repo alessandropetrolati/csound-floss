@@ -260,7 +260,7 @@ AudioComponentDescription desc_fx = {
 
 This point is crucial because you have to enter the same information in the file _Info.plist_
 
-![](12-h-plist.png)
+![](../resources/images/12-h-plist.png)
 
 In the _Info.plist_ (i.e. Information Property List) It&#39;s very important to declare the _Bundle display name_ key and &#39;_Require background modes_&#39; to enables the audio in the background.
 
@@ -659,7 +659,7 @@ The _waveDrawView_ class interacts with the waveLoopPointsView, the _loopoints_ 
 
 The two classes are instantiated in _**Main.storyboard**_, please note to the hierarchy that must be respected for the setup of other projects as well as the three _UIView_ must have the same size (frame) and cannot be dynamically resized.
 
-![](12-h-draw.png)
+![](../resources/images/12-h-draw.png)
 
 In the score of the file _csound\_waveform.csd_ file are declared two _gen_ (i.e. _gen_ 1) to load in memory the WAV files:
 
