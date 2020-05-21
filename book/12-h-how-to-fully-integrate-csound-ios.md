@@ -113,7 +113,7 @@ Basically, we setup the app as _PlayAndRecord_ category, then we create the Audi
 
 For proper operation with Audiobus (AB) and Inter-App Audio (IAA), you must instantiate and initialize one Audio Unit (AU), once for the entire life cycle of the app.Destroy and recreate the AU, it involves upgrading of the memory of the same (for each instance).If the app is connected to IAA or AB stops responding and you experience unpredictable behavior, which may lead to an unexpected crash.
 
-Actually there is no way to tell at runtime AB and / or IAA which the our AU address has changed.The _InitializeAudio_ function it should be called only once, unlike the functions run/stop of _Csound_.
+Actually there is no way to tell at runtime AB and / or IAA which the our AU address has changed. The _InitializeAudio_ function it should be called only once, unlike the functions run/stop of _Csound_.
 
 These aspects will be more clarified in the following paragraphs.
 
@@ -456,7 +456,7 @@ The following function Objective-C, looks for the placeholders in the _myOrchest
 }
 ~~~
 
-The NSString _pathAndName_ contains the file path of _myOrchestra.csd_ in the Resources folder.This path is used to copyin _myString_ the entire file (as NSString).Subsequently the _stringByReplacingOccurrencesOfString_ method, replaces the placeholders with the valid strings.
+The NSString _pathAndName_ contains the file path of _myOrchestra.csd_ in the Resources folder. This path is used to copyin _myString_ the entire file (as NSString). Subsequently the _stringByReplacingOccurrencesOfString_ method, replaces the placeholders with the valid strings.
 
 Example:
 
@@ -471,14 +471,13 @@ As a final step it is necessary re-initialise _Csound_ by calling the _runCsound
 
 ## Release ksmps from Buffer Frame
 
-As seen the second case is a good compromise, however it is not suitable in some particular conditions.So far we have only considered the aspect in which the app works on the main audio thread, with a BufferFrame imposed by iOS. However, there are special cases in which the app is called to work on a different thread and with a different BufferFrame.
+As seen the second case is a good compromise, however it is not suitable in some particular conditions. So far we have only considered the aspect in which the app works on the main audio thread, with a BufferFrame imposed by iOS. However, there are special cases in which the app is called to work on a different thread and with a different BufferFrame.
 
 For instance the &#39;freeze track feature&#39; implemented by major &#39;Host IAA apps&#39; (such Cubasis, Auria etc ...) bypasses the current setup of iOS and imposes an arbitrary BufferFrame(usually 64).
 
 Since _Csound_ it is still configured with the iOS BufferFrame (main audio thread) but during the &#39;freeze track&#39; process the _Csound\_Perform_ routine is called with a differentBufferFrame, _Csound_ cannot work properly.
 
 In order to solve this limitation we need a run-time control on the audio callback and handle the exception.
-
 On the _Csound\_Render_ we will evaluate the condition for which _slices_ is \&lt;1
 
 ~~~
@@ -515,7 +514,9 @@ OSStatus  Csound_Perform(void *inRefCon,
 
 Please note that _slices_ is calculated as follows:
 
+~~~
 int slices = inNumberFrames / csoundGetKsmps(cs);
+~~~
 
 Every time the _ksmps_ (for some reason) is greater than BufferFrame,we will perform the _Csound\_Perform\_DOWNSAMP_ procedure.
 
@@ -619,9 +620,7 @@ else {
 
 The _Csound\_Perform\_DOWNSAMP_ routine is called by iOS every 64 samples, while we must call _csoundPerformKsmps()_ after 512 samples, it means we need to skip eight times (i.e. UNSAMPLING) until we have collected the input buffer.
 
-From another point of view, before calling _csoundPerformKsmps()_ we must accumulate eight
-
-_inNumberFrames_ in _spin_, and for every call of_Csound\_Perform\_DOWNSAMP_ we must returns _inNumberFrames_ from _spout_.
+From another point of view, before calling _csoundPerformKsmps()_ we must accumulate eight _inNumberFrames_ in _spin_, and for every call of_Csound\_Perform\_DOWNSAMP_ we must returns _inNumberFrames_ from _spout_.
 
 In the example, the iOS audio is in the _buffer_ who is a pointer of the _ioData_ structure.
 
@@ -655,7 +654,7 @@ The implementation of both second and third cases, guarantees that the app works
 
 In this section we will see a more complex example to access memory (_gen_) of _Csound_ and display the contents on a UIView.
 
-The _waveDrawView_ class interacts with the waveLoopPointsView, the _loopoints_ allow us to select a portion of the file via the zoom on the waveform (pinch in / out).These values (loopoints) are managed by Csound which ensures the correct reading of the file and returns the normalized value (i.e. 0 ÷ 1) of the instantaneous phase of reading.
+The _waveDrawView_ class interacts with the waveLoopPointsView, the _loopoints_ allow us to select a portion of the file via the zoom on the waveform (pinch in / out). These values (loopoints) are managed by Csound which ensures the correct reading of the file and returns the normalized value (i.e. 0 ÷ 1) of the instantaneous phase of reading.
 
 The two classes are instantiated in _**Main.storyboard**_, please note to the hierarchy that must be respected for the setup of other projects as well as the three _UIView_ must have the same size (frame) and cannot be dynamically resized.
 
@@ -749,8 +748,9 @@ csoundInputMessage(_cs, [score cStringUsingEncoding:NSASCIIStringEncoding]);
 
 The &#39;_instr_ 53&#39; is kept active for UPDATE\_RES sec (0.1), the_maxalloc_ opcode limits the number of simultaneous instances (notes). Thus, any score events which falls inside UPDATE\_RES time, are ignored.
 
-	maxalloc 53,1  ;iPad UI Waveforms morphing only 1 instance
-
+~~~
+maxalloc 53,1  ;iPad UI Waveforms morphing only 1 instance
+~~~
 
 This results as a sub-sampling of Csound ‘instr 53’, compared to the UI pad-callback. The waveform display's process is done by the Waveview class, it is a simplified version of the WaveDrawView class, introduced in the tutorial (**04_plotWaveForm**), that does not deserves particular investigation.
 As mentioned, the waveforms's interpolations are performed by Csound, hereinafter is the 'instr 53' code:
@@ -765,7 +765,7 @@ chnset giWaveMORPH , "wave_func_table"
 
 The p4 and p5 p-fields, are the XY pad axes used as weights for the three vector-interpolations which are required.The _tablemix_ opcode, mixes two tables with different weights into _giWaveTMP1_ destination table.In this case we interpolate a Sine Wave (i.e. _giSine_) with a triangular (i.e. _giTri_), while in the second line between _giSawSmooth_ and _giSquareSmooth_,the result is in _giWaveTMP2_. At last of the process, _**giWaveMORPH**_ contain the interpolated values of the two _giWaveTMP1_ and _giWaveTMP2_ arrays.
 
-The global _ftgen_-tables, deliberately have been declared with the &#39;_p1__&#39;_ value to zero.This means that the _gen_-table number is assigned dynamically from _Csound_ at compile time. Since we do not know the number assigned, we must return the number of function through _chnset_ at runtime.
+The global _ftgen_-tables, deliberately have been declared with the &#39;_p1__&#39;_ value to zero. This means that the _gen_-table number is assigned dynamically from _Csound_ at compile time. Since we do not know the number assigned, we must return the number of function through _chnset_ at runtime.
 
 In the _**AudioDSP.m**_ class there is the implementation&#39;s code of the second example.
 
@@ -821,7 +821,7 @@ csoundAppendOpcode(cs, "MOOGLADDER", sizeof(MOOGLADDER_OPCODE),
                        0, 3, "a", "akk", iMOOGLADDER, kMOOGLADDER, aMOOGLADDER);
 ~~~
 
-Appends an opcode implemented by external softwareto Csound&#39;s internal opcode list.The opcode list is extended by one slot,and the parameters are copied into the new slot.
+Appends an opcode implemented by external softwareto Csound&#39;s internal opcode list. The opcode list is extended by one slot,and the parameters are copied into the new slot.
 
 Basically, what we have done is declare three pointers to functions (iMOOGLADDER, kMOOGLADDER and aMOOGLADDER) implemented in the class AudioDSP.
 
