@@ -875,8 +875,7 @@ The MOOGLADDER is a simplified and optimized implementation of the opcode moogla
 
 [Audiobus](http://audiob.us/)
 
-[The Open Music App Collaboration Manifesto]
-(https://docs.google.com/document/d/1UW-8vPEf95p0zO0hV1lpwD5MTgefKB1y-jdWR-nFYM8/edit?hl=en_US&pli=1)
+[The Open Music App Collaboration Manifesto](https://docs.google.com/document/d/1UW-8vPEf95p0zO0hV1lpwD5MTgefKB1y-jdWR-nFYM8/edit?hl=en_US&pli=1)
 
 [apeSoft](http://www.apesoft.it/)
 
