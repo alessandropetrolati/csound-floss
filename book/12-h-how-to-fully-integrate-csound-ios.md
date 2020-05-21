@@ -41,7 +41,7 @@ Since often we will refer to the tutorials (_xCode_ projects), it would be usefu
 
 ## Setup for an Audio App
 
-In the first _xCode_ project (_01\_csSetup__)_ we configure a &#39;Single View Application&#39; to work with audio and _Csound_. The project dependencies are the only **libcsound.a** and **libsndfile.a** with the headers (.h) files and _CsoundMIDI.h_ and _CsoundMIDI.m._
+In the first _xCode_ project (_01\_csSetup_) we configure a &#39;Single View Application&#39; to work with audio and _Csound_. The project dependencies are the only **libcsound.a** and **libsndfile.a** with the headers (.h) files and _CsoundMIDI.h_ and _CsoundMIDI.m._
 
 The code of _initializeAudio_ function will enable the input/output audio:
 
